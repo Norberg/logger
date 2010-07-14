@@ -4,7 +4,7 @@ set xlabel "Datetime"
 set ylabel "Celcius"
 
 set terminal png
-set output "/var/www/monthlyAVG.png"
+set output "~/www/monthlyAVG.png"
 set datafile separator "|"
 set style data lines
 set grid
