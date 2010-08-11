@@ -14,7 +14,6 @@ def logging():
 	date = datetime.datetime.now().strftime("%Y-%m-%d")
 	time = datetime.datetime.now().strftime("%H:%M")
 	sensorReadings = {}
-	readings = 0
 	while 1:
 		try:
 			value, id, sensor = readSensor.readSensor()
@@ -26,6 +25,8 @@ def logging():
 			#if sensor have allready have been read then we have 
 			#read them all
 			if sensorReadings.has_key(sensorLookUp[id]):
+				if len(sensorReadings) < 3:
+					print "Unexpected break"
 				break
 
 			sensorReadings[sensorLookUp[id]] = (sensor, value)

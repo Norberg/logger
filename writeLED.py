@@ -10,6 +10,8 @@ def writeLED(led, status):
 	ser.close()
 
 def writeLED_PWM(led, level):
+	if level > 255:
+		level = 255
 	ser = serial.Serial(port="/dev/arduino",baudrate=115200,timeout=3)
 	ser.write(led.lower()[0])
 	ser.write(chr(level))

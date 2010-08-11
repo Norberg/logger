@@ -35,12 +35,18 @@ def readSensor():
 	return value, id, sensor 
 
 def main():
-	value, id, sensor = readSensor()
-	if sensor == "Temp":
-		print "ID:", id, "Temp: ", value, "C"
-	else:
-		print "Sensor:", sensor, "ID:", id, "Value:", value
+	import json,socket
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect(('localhost',7011))
+	data  = s.recv(1000)
+	s.close()
+	sensorReadings = json.read(data)
+	for i, val in sensorReadings.iteritems():
+		if val[0] == 'Temp': 
+			print i, val[0]+ ':', val[1], "C"
+		else:	
+			print i, val[0]+ ':', val[1]
 
+	
 if __name__ == "__main__":
-	main()
 	main()
