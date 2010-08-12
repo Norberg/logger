@@ -34,19 +34,6 @@ def readSensor():
 
 	return value, id, sensor 
 
-def main():
-	import json,socket
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect(('localhost',7011))
-	data  = s.recv(1000)
-	s.close()
-	sensorReadings = json.read(data)
-	for i, val in sensorReadings.iteritems():
-		if val[0] == 'Temp': 
-			print i, val[0]+ ':', val[1], "C"
-		else:	
-			print i, val[0]+ ':', val[1]
-
-	
 if __name__ == "__main__":
-	main()
+	print "Direct use depricated use recvReading.py instead"
+

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import threading, socket, json
 import readSensor
 HOST = ''
@@ -9,6 +10,7 @@ sensorLookUp = {"10 DE C6 35 1 8 0 86" : "indoor", \
 
 sensorReadings = {}
 s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.bind((HOST,PORT))
 s.listen(5)
 class Dispatch(threading.Thread):
