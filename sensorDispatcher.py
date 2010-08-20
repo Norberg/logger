@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import threading, socket, json
-import readSensor
+import readSensor, writeLED
 HOST = ''
 PORT = 7011
 sensorLookUp = {"10 DE C6 35 1 8 0 86" : "indoor", \
@@ -15,15 +15,19 @@ s.bind((HOST,PORT))
 s.listen(5)
 class Dispatch(threading.Thread):
 	def run(self, conn):
-		conn.send(json.write(sensorReadings))
-		conn.close()
+		try:
+			input = conn.recv(1024)
+			writeLED.writeLEDs(input.split())
+		except socket.error:
+			conn.send(json.write(sensorReadings))
+			conn.close()
 
 class Dispatcher(threading.Thread):   
 	def run(self):  
 		while 1:
-			print "waiting.."
 			conn,addr = s.accept()
-			print "connection with:", addr
+			conn.settimeout(1)
+			print "connected to:", addr
 			Dispatch().run(conn)
 
 
@@ -37,7 +41,6 @@ class SensorReader(threading.Thread):
 				continue
 			if sensorLookUp.has_key(id):
 				sensorReadings[sensorLookUp[id]] = (sensor, value)
-				print "read one"
 			else:		
 				print "ID:", id, "not found in sensorLookUp, please add"
 Dispatcher().start()
