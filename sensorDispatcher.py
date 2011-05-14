@@ -27,7 +27,6 @@ class Dispatcher(threading.Thread):
 		while 1:
 			conn,addr = s.accept()
 			conn.settimeout(1)
-			print "connected to:", addr
 			Dispatch().run(conn)
 
 

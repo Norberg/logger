@@ -18,6 +18,12 @@ sudo udevadm info -a -p /sys/class/tty/ttyUSB0 | grep interface
 
 Then replug the device and /dev/arduino should appear.
 
+Create database
+sqlite sensors.db
+sqlite>CREATE TABLE sensors (date date, time time, value float, sensor vchar(10), name vchar(10));
+sqlite>CREATE INDEX idx1 ON sensors(date);
+
+
 
 HUGE Database:
 Over time the database will grow resulting in slower and slower sql queries
