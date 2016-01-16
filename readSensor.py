@@ -19,6 +19,9 @@ def readSensor():
 		try:
 			id=re.split("Sensor: | ID: | Temp: |C\r\n", input)[2]
 			value=re.split("Sensor: | ID: | Temp: |C\r\n", input)[3]
+			value=value.split(" ")[0]
+			value=value.strip("C")
+			print input
 		except:
 			return False
 	elif sensor == "Humidity":
@@ -35,5 +38,7 @@ def readSensor():
 	return value, id, sensor 
 
 if __name__ == "__main__":
+	readSensor()
+	readSensor()
 	print "Direct use depricated use recvReading.py instead"
 

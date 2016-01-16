@@ -10,7 +10,7 @@ def recvReading():
 		return {}
 	data  = s.recv(1000)
 	s.close()
-	return json.read(data)
+	return json.loads(data)
 
 def main():
 	sensorReadings = recvReading()

@@ -15,11 +15,7 @@ s.bind((HOST,PORT))
 s.listen(5)
 class Dispatch(threading.Thread):
 	def run(self, conn):
-		try:
-			input = conn.recv(1024)
-			writeLED.writeLEDs(input.split())
-		except socket.error:
-			conn.send(json.write(sensorReadings))
+			conn.send(json.dumps(sensorReadings))
 			conn.close()
 
 class Dispatcher(threading.Thread):   
@@ -35,6 +31,7 @@ class SensorReader(threading.Thread):
 		while 1:
 			try:
 				value, id, sensor = readSensor.readSensor()
+				float(value) # trigger exception if value is not float
 			except:
 				print "not able to get sensor reading:"
 				continue
