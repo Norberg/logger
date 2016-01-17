@@ -30,11 +30,15 @@ class SensorReader(threading.Thread):
 	def run(self):
 		while 1:
 			try:
-				value, id, sensor = readSensor.readSensor()
-				float(value) # trigger exception if value is not float
-			except:
-				print "not able to get sensor reading:"
-				continue
+				self.readSensors()
+			except Exception as e:
+				print "Got exception:" + str(e)
+
+	def readSensors(self):
+		ser = readSensor.connectArduino()
+		while 1:
+			value, id, sensor = readSensor.readSensor(ser)
+			float(value) # trigger exception if value is not float
 			if sensorLookUp.has_key(id):
 				sensorReadings[sensorLookUp[id]] = (sensor, value)
 			else:		

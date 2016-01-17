@@ -1,14 +1,25 @@
 import serial, re
-ser=serial.Serial(port="/dev/arduino",baudrate=115200,timeout=3)
-def readSensor():
-	try:	
-		ser.open()
+
+def connectArduino():
+	ser = serial.Serial(port="/dev/arduino",baudrate=115200,timeout=3)
+	try:
 		ser.flushInput() # flush old input before getting new
-		input = ser.readline()
+	except Exception as e:
+		print "opening and reading serial port failed" + str(e) 
 		ser.close()
-	except:
-		print "opening and reading serial port failed"
+		raise e
+	return ser
+
+def readSensor(ser):
+	try:	
+		reading = ser.readline()
+	except Exception as e:
+		print "opening and reading serial port failed" + e 
 		ser.close()
+		raise e
+	return parseLine(reading)
+
+def parseLine(input):
 	try:
 		sensor = re.split(" Sensor: | ", input)[1]
 	except:
@@ -21,7 +32,6 @@ def readSensor():
 			value=re.split("Sensor: | ID: | Temp: |C\r\n", input)[3]
 			value=value.split(" ")[0]
 			value=value.strip("C")
-			print input
 		except:
 			return False
 	elif sensor == "Humidity":
@@ -38,7 +48,9 @@ def readSensor():
 	return value, id, sensor 
 
 if __name__ == "__main__":
-	readSensor()
-	readSensor()
+	ser = connectArduino()
+	while 1:
+		print readSensor(ser)
+	
 	print "Direct use depricated use recvReading.py instead"
 
