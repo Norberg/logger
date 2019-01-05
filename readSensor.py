@@ -5,16 +5,16 @@ def connectArduino():
 	try:
 		ser.flushInput() # flush old input before getting new
 	except Exception as e:
-		print "opening and reading serial port failed" + str(e) 
+		print("opening and reading serial port failed" + str(e))
 		ser.close()
 		raise e
 	return ser
 
 def readSensor(ser):
 	try:	
-		reading = ser.readline()
+		reading = ser.readline().decode("utf-8")
 	except Exception as e:
-		print "opening and reading serial port failed" + e 
+		print("opening and reading serial port failed" + e)
 		ser.close()
 		raise e
 	return parseLine(reading)
@@ -22,8 +22,9 @@ def readSensor(ser):
 def parseLine(input):
 	try:
 		sensor = re.split(" Sensor: | ", input)[1]
-	except:
-		print "Incorretly formated:", input
+	except e:
+		print("exception:" + e);
+		print("Incorretly formated:", input)
 		return False
 		
 	if sensor == "Temp":
@@ -32,7 +33,8 @@ def parseLine(input):
 			value=re.split("Sensor: | ID: | Temp: |C\r\n", input)[3]
 			value=value.split(" ")[0]
 			value=value.strip("C")
-		except:
+		except e:
+			print("exception:" + e);
 			return False
 	elif sensor == "Humidity":
 		try:
@@ -41,16 +43,16 @@ def parseLine(input):
 		except:
 			return False
 	elif sensor == "Error":
-		print input
+		print(input);
 	else:
-		print "Incorretly formated:", input
+		print("Incorretly formated:", input)
 
 	return value, id, sensor 
 
 if __name__ == "__main__":
 	ser = connectArduino()
 	while 1:
-		print readSensor(ser)
+		print(readSensor(ser))
 	
-	print "Direct use depricated use recvReading.py instead"
+	print ("Direct use depricated use recvReading.py instead")
 
